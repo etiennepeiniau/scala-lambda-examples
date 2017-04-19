@@ -1,0 +1,25 @@
+service: api-gateway-hello-proxy
+
+provider:
+  name: aws
+  runtime: java8
+  region: eu-west-1
+  timeout: 10
+  memorySize: 512
+
+package:
+  artifact: ../../target/scala-2.12/scala-lambda-examples-assembly-1.0.jar
+
+functions:
+  configuration:
+    handler: apigateway.ApiGatewayHelloProxy
+    role: arn:aws:iam::556175839129:role/lambda_basic_execution
+    events:
+      - http:
+          method: get
+          path: /{firstname}
+
+
+
+
+

@@ -1,0 +1,92 @@
+lambdaConfigurationRole:
+  Type: AWS::IAM::Role
+  Properties:
+    RoleName: lambda_configuration_log_role_${self:custom.stageName}
+    AssumeRolePolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+          Action: sts:AssumeRole
+    Policies:
+      - PolicyName: LogWriteAccess
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow # to log
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource:
+                - arn:aws:logs:eu-west-1:556175839129:log-group:/aws/lambda/*:*:*
+
+lambdaGetCodesRole:
+  Type: AWS::IAM::Role
+  Properties:
+    RoleName: lambda_get_codes_log_role_${self:custom.stageName}
+    AssumeRolePolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+          Action: sts:AssumeRole
+    Policies:
+      - PolicyName: LogWriteAccess
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow # to log
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource:
+                - arn:aws:logs:eu-west-1:556175839129:log-group:/aws/lambda/*:*:*
+      - PolicyName: DynamoAllAccess
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow # to log
+              Action:
+                - dynamodb:*
+              Resource:
+                - arn:aws:dynamodb:eu-west-1:556175839129:table/HttpCodeStatistics
+
+lambdaPutCodeRole:
+  Type: AWS::IAM::Role
+  Properties:
+    RoleName: lambda_put_code_log_role_${self:custom.stageName}
+    AssumeRolePolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+          Action: sts:AssumeRole
+    Policies:
+      - PolicyName: LogWriteAccess
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow # to log
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource:
+                - arn:aws:logs:eu-west-1:556175839129:log-group:/aws/lambda/*:*:*
+      - PolicyName: DynamoAllAccess
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow # to log
+              Action:
+                - dynamodb:*
+              Resource:
+                - arn:aws:dynamodb:eu-west-1:556175839129:table/HttpCodeStatistics

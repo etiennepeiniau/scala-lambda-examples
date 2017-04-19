@@ -1,0 +1,72 @@
+service: http-codes-api
+
+provider:
+  name: aws
+  runtime: java8
+  region: eu-west-1
+  timeout: 10
+  memorySize: 512
+
+package:
+  artifact: ../../target/scala-2.12/scala-lambda-examples-assembly-1.0.jar
+
+custom:
+  stageName: ${opt:stage}
+  dynamoTable: httpCodeStatistics
+
+functions:
+  ###
+  configuration:
+    handler: httpcodes.Configuration
+    role: lambdaConfigurationRole
+    events:
+      - http:
+          private: true
+          method: get
+          path: configuration/
+          cors: true
+  ###
+  getCodes:
+    handler: httpcodes.CodeStatistics
+    role: lambdaGetCodesRole
+    environment:
+      TARGET_DYNAMO_TABLE_NAME: ${self:custom.dynamoTable}
+    events:
+      - http:
+          private: true
+          path: codes
+          method: get
+          cors: true
+  ###
+  putCode:
+    handler: httpcodes.CodeEvent
+    role: lambdaPutCodeRole
+    environment:
+      TARGET_DYNAMO_TABLE_NAME: ${self:custom.dynamoTable}
+    events:
+      - http:
+          private: true
+          path: code/{code}
+          method: put
+          cors: true
+
+resources:
+  Resources:
+    ### dynamo ###
+    httpCodesDynamoTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: HttpCodeStatistics
+        AttributeDefinitions:
+        - AttributeName: code
+          AttributeType: N
+        KeySchema:
+        - AttributeName: code
+          KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
+    ### Roles ####
+    lambdaConfigurationRole: ${file(./serverless.d/roles.yml):lambdaConfigurationRole}
+    lambdaGetCodesRole: ${file(./serverless.d/roles.yml):lambdaGetCodesRole}
+    lambdaPutCodeRole: ${file(./serverless.d/roles.yml):lambdaPutCodeRole}
