@@ -6,7 +6,7 @@ import io.circe.generic.auto._
 
 object CommonResponses {
 
-  implicit val errorEncoder: Encoder[Error] = Encoder.instance(a => ErrorResponse(a.fillInStackTrace().getMessage).asJson)
+  implicit val ErrorEncoder: Encoder[Error] = Encoder.instance(a => ErrorResponse(a.fillInStackTrace().getMessage).asJson)
 
   sealed trait Response
 

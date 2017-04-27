@@ -10,11 +10,13 @@ import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 
+import scala.io.Source
+
 // handler: apigateway.ApiGatewayHelloProxy
 class ApiGatewayHelloProxy extends RequestStreamHandler {
 
   def handleRequest(in: InputStream, out: OutputStream, context: Context): Unit = {
-    val payload = scala.io.Source.fromInputStream(in).mkString
+    val payload = Source.fromInputStream(in).mkString
 
     val reply = decode[AwsProxyRequest](payload) match {
       case Left(error) => AwsProxyResponse(

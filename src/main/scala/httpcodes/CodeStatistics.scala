@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets.UTF_8
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
-import commons.ApiGatewayInternals.{AwsProxyResponse, CORS_HEADERS}
+import commons.ApiGatewayInternals.{AwsProxyResponse, CorsHeaders}
 import io.circe.generic.auto._
 import io.circe.syntax._
 
@@ -25,7 +25,7 @@ class CodeStatistics extends RequestStreamHandler {
       .toMap
 
     // create and return an AwsProxyResponse
-    val response = AwsProxyResponse(200, CORS_HEADERS, statistics.asJson.noSpaces)
+    val response = AwsProxyResponse(200, CorsHeaders, statistics.asJson.noSpaces)
     out.write(response.asJson.noSpaces.getBytes(UTF_8))
   }
 

@@ -4,7 +4,7 @@ import java.io.{InputStream, OutputStream}
 import java.nio.charset.StandardCharsets.UTF_8
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
-import commons.ApiGatewayInternals.{AwsProxyResponse, CORS_HEADERS}
+import commons.ApiGatewayInternals.{AwsProxyResponse, CorsHeaders}
 import io.circe.generic.auto._
 import io.circe.syntax._
 import org.apache.http.HttpStatus
@@ -34,7 +34,7 @@ class Configuration extends RequestStreamHandler {
     val configuration = Configuration(templateUrl, codes)
 
     // create and return an AwsProxyResponse
-    val response = AwsProxyResponse(200, CORS_HEADERS, configuration.asJson.noSpaces)
+    val response = AwsProxyResponse(200, CorsHeaders, configuration.asJson.noSpaces)
     out.write(response.asJson.noSpaces.getBytes(UTF_8))
   }
 

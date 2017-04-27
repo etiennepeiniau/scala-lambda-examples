@@ -2,7 +2,7 @@ package commons
 
 object ApiGatewayInternals {
 
-  val CORS_HEADERS = Map(("Access-Control-Allow-Origin", "*"))
+  val CorsHeaders = Map(("Access-Control-Allow-Origin", "*"))
 
   case class AwsProxyRequest(httpMethod: String,
                              resource: String,
